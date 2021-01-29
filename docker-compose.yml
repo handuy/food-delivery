@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  web:
+    image: handuy1992/food-delivery
+    ports:
+      - "8181:8181"
+    depends_on:
+      - mysql
+  mysql:
+    image: handuy1992/food-delivery-mysql
+    volumes:
+      - /var/lib/mysql
