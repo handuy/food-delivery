@@ -1,6 +1,7 @@
 package userbusiness
 
 import (
+	"context"
 	"food-delivery/common"
 	"food-delivery/module/user/usermodel"
 	"net/http"
@@ -21,7 +22,7 @@ func NewCreateUserBusiness(store CreateUserStore) *createUserBusiness {
 	return &createUserBusiness{store: store}
 }
 
-func(c *createUserBusiness) CreateUser(newUser usermodel.NewUser, tokenSecret string) (string, error) {
+func(c *createUserBusiness) CreateUser(ctx context.Context, newUser usermodel.NewUser, tokenSecret string) (string, error) {
 	checkEmailExist := c.store.CheckEmailExist(newUser.Email)
 	if checkEmailExist != nil {
 		return "", common.NewErrorResponse(http.StatusBadRequest, checkEmailExist, 

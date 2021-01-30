@@ -17,7 +17,7 @@ func GetAllFood(provider common.AppContext) func(c *gin.Context) {
 		sqlStore := foodstorage.NewFoodStorage(db)
 		foodBiz := foodbusiness.NewGetFoodBusiness(sqlStore)
 
-		result, err := foodBiz.GetAll()
+		result, err := foodBiz.GetAll( c.Request.Context() )
 		if err != nil {
 			c.Status(http.StatusInternalServerError)
 			return
@@ -36,7 +36,7 @@ func GetFoodById(provider common.AppContext) func(c *gin.Context) {
 		sqlStore := foodstorage.NewFoodStorage(db)
 		foodBiz := foodbusiness.NewGetFoodBusiness(sqlStore)
 
-		result, err := foodBiz.GetById(idInt)
+		result, err := foodBiz.GetById( c.Request.Context(), idInt)
 		if err != nil {
 			if err.Error() == "Không tìm thấy note" {
 				c.JSON(http.StatusNotFound, common.NewErrorResponse(

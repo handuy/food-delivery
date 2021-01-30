@@ -21,5 +21,5 @@ func main() {
 	r := gin.Default()
 	router.SetupRouter(r, appContext)
 
-	r.Run("localhost:8181")
+	r.Run(":8181")
 }

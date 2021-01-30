@@ -26,7 +26,7 @@ func LoginUser(provider common.AppContext) func(c *gin.Context) {
 		loginUserBusiness := userbusiness.NewLoginBusiness(sqlStore)
 		tokenSecret := provider.GetTokenSecret()
 
-		token, err := loginUserBusiness.LogIn(newUser, tokenSecret)
+		token, err := loginUserBusiness.LogIn( c.Request.Context(), newUser, tokenSecret )
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.NewErrorResponse(http.StatusBadRequest, err,
 				"Không thể đăng kí tài khoản",

@@ -1,6 +1,7 @@
 package foodbusiness
 
 import (
+	"context"
 	"errors"
 	"food-delivery/module/food/foodmodel"
 )
@@ -20,7 +21,7 @@ func NewGetFoodBusiness(store GetFoodStore) *getFoodBusiness {
 	}
 }
 
-func (getFood *getFoodBusiness) GetAll() ([]foodmodel.Food, error) {
+func (getFood *getFoodBusiness) GetAll(ctx context.Context) ([]foodmodel.Food, error) {
 	result, err := getFood.store.GetAllFoods()
 	if err != nil {
 		return nil, err
@@ -29,7 +30,7 @@ func (getFood *getFoodBusiness) GetAll() ([]foodmodel.Food, error) {
 	return result, nil
 }
 
-func (getFood *getFoodBusiness) GetById(id int) (foodmodel.Food, error) {
+func (getFood *getFoodBusiness) GetById(ctx context.Context, id int) (foodmodel.Food, error) {
 	result, err := getFood.store.GetFoodById(id)
 	if err != nil {
 		return result, err

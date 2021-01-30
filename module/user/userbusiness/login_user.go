@@ -1,6 +1,7 @@
 package userbusiness
 
 import (
+	"context"
 	"food-delivery/common"
 	"food-delivery/module/user/usermodel"
 	"net/http"
@@ -18,8 +19,8 @@ func NewLoginBusiness(store LoginStore) *loginBusiness {
 	return &loginBusiness{store: store}
 }
 
-func (l *loginBusiness) LogIn(loginUser usermodel.NewUser, tokenSecret string) (string, error) {
-	userInfo, err := l.store.GetUser(loginUser.Email)
+func (login *loginBusiness) LogIn(ctx context.Context, loginUser usermodel.NewUser, tokenSecret string) (string, error) {
+	userInfo, err := login.store.GetUser(loginUser.Email)
 	if err != nil {
 		return "", common.NewErrorResponse(http.StatusUnauthorized, err,
 			"Sai thông tin đăng nhập",

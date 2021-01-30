@@ -26,7 +26,7 @@ func CreateUser(provider common.AppContext) func(c *gin.Context) {
 		createUserbiz := userbusiness.NewCreateUserBusiness(sqlStore)
 		tokenSecret := provider.GetTokenSecret()
 
-		token, err := createUserbiz.CreateUser(newUser, tokenSecret)
+		token, err := createUserbiz.CreateUser( c.Request.Context(), newUser, tokenSecret )
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.NewErrorResponse(http.StatusBadRequest, err,
 				"Không thể đăng kí tài khoản",

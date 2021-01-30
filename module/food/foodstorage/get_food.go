@@ -24,7 +24,7 @@ func (s *store) GetAllFoods() ([]foodmodel.Food, error) {
 
 func (s *store) GetFoodById(id int) (foodmodel.Food, error) {
 	var result foodmodel.Food
-	err := s.db.Raw("select * from notes where id = ?", id).Scan(&result).Error
+	err := s.db.Raw("select * from foods where id = ?", id).Scan(&result).Error
 	if err != nil {
 		return result, err
 	}
