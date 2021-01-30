@@ -1,26 +1,31 @@
 package controller
 
 import (
-	"food-delivery/domain"
 	"food-delivery/common"
+	"food-delivery/domain"
+	"food-delivery/module/food/foodbusiness"
+	"food-delivery/module/food/foodstorage"
 
 	"net/http"
 	"strconv"
 
-	"github.com/gin-gonic/contrib/jwt"
 	"github.com/gin-gonic/gin"
 )
 
 func GetAllFood(provider common.AppContext) func(c *gin.Context) {
 	return func(c *gin.Context) {
-		result, err := noteHandler.NoteService.GetAll()
+		db := provider.GetMainDBConnection()
+		sqlStore := foodstorage.NewFoodStorage(db)
+		foodBiz := foodbusiness.NewGetFoodBusiness(sqlStore)
+
+		result, err := foodBiz.GetAll()
 		if err != nil {
 			c.Status(http.StatusInternalServerError)
 			return
 		}
 		c.JSON(http.StatusOK, result)
 	}
-	
+
 }
 
 func GetFoodById(provider common.AppContext) func(c *gin.Context) {
@@ -28,7 +33,11 @@ func GetFoodById(provider common.AppContext) func(c *gin.Context) {
 		id := c.Param("id")
 		idInt, _ := strconv.Atoi(id)
 
-		result, err := noteHandler.NoteService.GetById(idInt)
+		db := provider.GetMainDBConnection()
+		sqlStore := foodstorage.NewFoodStorage(db)
+		foodBiz := foodbusiness.NewGetFoodBusiness(sqlStore)
+
+		result, err := foodBiz.GetById(idInt)
 		if err != nil {
 			if err.Error() == "Không tìm thấy note" {
 				c.JSON(http.StatusNotFound, domain.StatusMessage{
@@ -45,5 +54,5 @@ func GetFoodById(provider common.AppContext) func(c *gin.Context) {
 
 		c.JSON(http.StatusOK, result)
 	}
-	
+
 }
