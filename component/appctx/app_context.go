@@ -7,7 +7,7 @@ type ctx struct {
 	tokenSecret string
 }
 
-func New(db *gorm.DB,tokenSecret string ) *ctx {
+func New(db *gorm.DB, tokenSecret string ) *ctx {
 	return &ctx{mainDB: db, tokenSecret: tokenSecret}
 }
 

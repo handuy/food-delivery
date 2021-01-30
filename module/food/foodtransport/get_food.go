@@ -1,4 +1,4 @@
-package controller
+package foodtransport
 
 import (
 	"food-delivery/common"
