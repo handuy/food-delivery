@@ -2,18 +2,28 @@ package foodstorage
 
 import (
 	"errors"
+	"fmt"
+	"food-delivery/common"
 	"food-delivery/module/food/foodmodel"
 )
 
-func (s *store) GetAllFoods() ([]foodmodel.Food, error) {
-	rows, err := s.db.Raw("select * from notes").Rows()
+func (s *store) GetAllFoods(paging common.Paging) ([]foodmodel.GetFood, error) {
+	sqlQuery := fmt.Sprintf(`
+		SELECT id, name, price, short_description
+		FROM foods
+		ORDER BY created_at DESC
+		LIMIT %d
+		OFFSET %d
+	`, paging.Limit, (paging.Page - 1) * paging.Limit)
+	
+	rows, err := s.db.Raw(sqlQuery).Rows()
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var result []foodmodel.Food
-	var item foodmodel.Food
+	var result []foodmodel.GetFood
+	var item foodmodel.GetFood
 	for rows.Next() {
 		s.db.ScanRows(rows, &item)
 		result = append(result, item)

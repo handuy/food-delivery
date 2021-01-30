@@ -3,11 +3,12 @@ package foodbusiness
 import (
 	"context"
 	"errors"
+	"food-delivery/common"
 	"food-delivery/module/food/foodmodel"
 )
 
 type GetFoodStore interface {
-	GetAllFoods() ([]foodmodel.Food, error)
+	GetAllFoods(paging common.Paging) ([]foodmodel.GetFood, error)
 	GetFoodById(id int) (foodmodel.Food, error)
 }
 
@@ -21,8 +22,8 @@ func NewGetFoodBusiness(store GetFoodStore) *getFoodBusiness {
 	}
 }
 
-func (getFood *getFoodBusiness) GetAll(ctx context.Context) ([]foodmodel.Food, error) {
-	result, err := getFood.store.GetAllFoods()
+func (getFood *getFoodBusiness) GetAll(ctx context.Context, paging common.Paging) ([]foodmodel.GetFood, error) {
+	result, err := getFood.store.GetAllFoods(paging)
 	if err != nil {
 		return nil, err
 	}

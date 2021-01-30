@@ -13,11 +13,21 @@ import (
 
 func GetAllFood(provider common.AppContext) func(c *gin.Context) {
 	return func(c *gin.Context) {
+		var paging common.Paging
+		if err := c.ShouldBindJSON(&paging); err != nil {
+			c.JSON(http.StatusBadRequest, common.NewErrorResponse(http.StatusBadRequest, err,
+				"Yêu cầu không hợp lệ",
+				"Yêu cầu không hợp lệ",
+				"Yêu cầu không hợp lệ"))
+			return
+		}
+		paging.FillPage()
+
 		db := provider.GetMainDBConnection()
 		sqlStore := foodstorage.NewFoodStorage(db)
 		foodBiz := foodbusiness.NewGetFoodBusiness(sqlStore)
 
-		result, err := foodBiz.GetAll( c.Request.Context() )
+		result, err := foodBiz.GetAll( c.Request.Context(), paging )
 		if err != nil {
 			c.Status(http.StatusInternalServerError)
 			return
