@@ -2,7 +2,6 @@ package foodtransport
 
 import (
 	"food-delivery/common"
-	"food-delivery/domain"
 	"food-delivery/module/food/foodbusiness"
 	"food-delivery/module/food/foodstorage"
 
@@ -40,15 +39,17 @@ func GetFoodById(provider common.AppContext) func(c *gin.Context) {
 		result, err := foodBiz.GetById(idInt)
 		if err != nil {
 			if err.Error() == "Không tìm thấy note" {
-				c.JSON(http.StatusNotFound, domain.StatusMessage{
-					Message: "Không tìm thấy note",
-				})
+				c.JSON(http.StatusNotFound, common.NewErrorResponse(
+					http.StatusNotFound, err,
+					"Không tìm thấy note", "Không tìm thấy note", "Không tìm thấy note",
+				))
 				return
 			}
 
-			c.JSON(http.StatusInternalServerError, domain.StatusMessage{
-				Message: "Lỗi server",
-			})
+			c.JSON(http.StatusInternalServerError, common.NewErrorResponse(
+				http.StatusNotFound, err,
+				"Không tìm thấy note", "Không tìm thấy note", "Không tìm thấy note",
+			))
 			return
 		}
 
